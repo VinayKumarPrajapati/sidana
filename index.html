@@ -576,13 +576,20 @@
         .music-artwork {
             width: 100%;
             height: clamp(200px, 30vw, 250px);
-            background: var(--gradient-player);
             position: relative;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: clamp(2.5rem, 5vw, 3.5rem);
+            background: var(--gradient-player);
+        }
+
+        .music-artwork video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0;
         }
 
         .play-overlay {
@@ -603,6 +610,7 @@
             transition: all 0.3s ease;
             z-index: 2;
             border: 2px solid rgba(255, 255, 255, 0.5);
+            cursor: pointer;
         }
 
         .music-card:hover .play-overlay {
@@ -1690,7 +1698,7 @@
                 </div>
                 
                 <!-- Hidden Audio Elements -->
-  <audio id="audioPlayer" preload="metadata">
+                <audio id="audioPlayer" preload="metadata">
                     <source src="Dil Dharakta Hai - Female Version by Ahana Bajaj.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
@@ -1712,7 +1720,10 @@
             <div class="music-grid">
                 <div class="music-card fade-in" data-track="0" data-youtube="kJoRISQKlkk">
                     <div class="music-artwork">
-                        🎵
+                        <video controls muted>
+                            <source src="1.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
                         <div class="play-overlay" onclick="playTrack(0)">▶️</div>
                     </div>
                     <div class="music-info">
@@ -1736,7 +1747,10 @@
 
                 <div class="music-card fade-in" data-track="1" data-youtube="JL-L69V4PcY">
                     <div class="music-artwork">
-                        🏛️
+                        <video controls muted>
+                            <source src="2.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
                         <div class="play-overlay" onclick="playTrack(1)">▶️</div>
                     </div>
                     <div class="music-info">
@@ -1760,7 +1774,10 @@
 
                 <div class="music-card fade-in" data-track="2" data-youtube="hBKdv8Dib_U">
                     <div class="music-artwork">
-                        🧸
+                        <video controls muted>
+                            <source src="3.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
                         <div class="play-overlay" onclick="playTrack(2)">▶️</div>
                     </div>
                     <div class="music-info">
@@ -1784,7 +1801,10 @@
 
                 <div class="music-card fade-in" data-track="3" data-youtube="hBKdv8Dib_U">
                     <div class="music-artwork">
-                        💫
+                        <video controls muted>
+                            <source src="4.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
                         <div class="play-overlay" onclick="playTrack(3)">▶️</div>
                     </div>
                     <div class="music-info">
@@ -1808,7 +1828,10 @@
 
                 <div class="music-card fade-in" data-track="4" data-youtube="aWQQ1XCpODs">
                     <div class="music-artwork">
-                        🎭
+                        <video controls muted>
+                            <source src="5.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
                         <div class="play-overlay" onclick="playTrack(4)">▶️</div>
                     </div>
                     <div class="music-info">
@@ -1832,6 +1855,7 @@
 
                 <div class="music-card fade-in" data-track="5">
                     <div class="music-artwork">
+                        
                         🌟
                         <div class="play-overlay" onclick="showComingSoon()">▶️</div>
                     </div>
@@ -2323,35 +2347,35 @@
                         artist: "Female Version by Ahana Bajaj",
                         duration: "0:53",
                         youtube: "kJoRISQKlkk",
-                        emoji: "🎵"
+                        video: "1.mp4"
                     },
                     {
                         title: "Agar Tum Saath Ho X Hauz Khas",
                         artist: "Vocals by Ahana Bajaj & Sahil Sood",
                         duration: "1:21",
                         youtube: "JL-L69V4PcY",
-                        emoji: "🏛️"
+                        video: "2.mp4"
                     },
                     {
                         title: "The Not So Perfect Us",
                         artist: "Guitar, Beats & Story by Veer S",
                         duration: "1:25",
                         youtube: "hBKdv8Dib_U",
-                        emoji: "🧸"
+                        video: "3.mp4"
                     },
                     {
                         title: "Dil Dharakta Hai - Extended",
                         artist: "Narration by Veer S, Piano by Raj Chandak",
                         duration: "1:28",
                         youtube: "hBKdv8Dib_U",
-                        emoji: "💫"
+                        video: "4.mp4"
                     },
                     {
                         title: "Dil Dharakta Hai - Narration",
                         artist: "Lyrics & Narration by Veer S",
                         duration: "1:09",
                         youtube: "aWQQ1XCpODs",
-                        emoji: "🎭"
+                        video: "5.mp4"
                     }
                 ];
             }
@@ -2365,12 +2389,75 @@
                 this.initInteractiveElements();
                 this.initShayariInteractions();
                 this.setupGlobalMusicFunctions();
+                this.initVideoPlayers();
             }
 
             setupGlobalMusicFunctions() {
                 // Make functions globally accessible
                 window.playTrack = (trackIndex) => this.playTrack(trackIndex);
                 window.showComingSoon = () => this.showComingSoon();
+            }
+
+            initVideoPlayers() {
+                // Initialize all video players with proper controls and behavior
+                const videos = document.querySelectorAll('.music-artwork video');
+                videos.forEach((video, index) => {
+                    video.addEventListener('loadedmetadata', () => {
+                        console.log(`Video ${index + 1} loaded successfully`);
+                    });
+                    
+                    video.addEventListener('error', (e) => {
+                        console.error(`Error loading video ${index + 1}:`, e);
+                        // Show fallback content if video fails to load
+                        const artwork = video.parentElement;
+                        if (artwork) {
+                            artwork.innerHTML = `
+                                <div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 3rem;">
+                                    🎵
+                                </div>
+                                <div class="play-overlay" onclick="playTrack(${index})">▶️</div>
+                            `;
+                        }
+                    });
+
+                    // Pause other videos when one starts playing
+                    video.addEventListener('play', () => {
+                        videos.forEach((otherVideo, otherIndex) => {
+                            if (otherIndex !== index && !otherVideo.paused) {
+                                otherVideo.pause();
+                            }
+                        });
+                    });
+                });
+            }
+
+            playTrack(trackIndex) {
+                if (trackIndex >= 0 && trackIndex < this.tracks.length) {
+                    this.currentTrack = trackIndex;
+                    this.updateTrackInfo(trackIndex);
+                    
+                    // Find and play the corresponding video
+                    const videos = document.querySelectorAll('.music-artwork video');
+                    if (videos[trackIndex]) {
+                        // Pause all other videos
+                        videos.forEach((video, index) => {
+                            if (index !== trackIndex && !video.paused) {
+                                video.pause();
+                            }
+                        });
+                        
+                        // Play the selected video
+                        videos[trackIndex].play().catch(error => {
+                            console.error('Video playback failed:', error);
+                        });
+                    }
+                    
+                    // Show notification
+                    this.showTrackNotification(this.tracks[trackIndex]);
+                    
+                    // Start visual playback simulation
+                    this.startPlayback();
+                }
             }
 
             initSpectrumVisualizer() {
@@ -2447,23 +2534,6 @@
                 this.updateTrackInfo(this.currentTrack);
             }
 
-            playTrack(trackIndex) {
-                if (trackIndex >= 0 && trackIndex < this.tracks.length) {
-                    this.currentTrack = trackIndex;
-                    this.updateTrackInfo(trackIndex);
-                    
-                    // For demonstration, we'll show a professional notification
-                    // In a real app, this would integrate with Spotify/YouTube APIs
-                    this.showTrackNotification(this.tracks[trackIndex]);
-                    
-                    // Open YouTube in new tab for actual playback
-                    window.open(`https://www.youtube.com/watch?v=${this.tracks[trackIndex].youtube}`, '_blank');
-                    
-                    // Start visual playback simulation
-                    this.startPlayback();
-                }
-            }
-
             showTrackNotification(track) {
                 // Create a professional Spotify-style notification
                 const notification = document.createElement('div');
@@ -2489,7 +2559,7 @@
                 
                 notification.innerHTML = `
                     <div style="display: flex; align-items: center; gap: 12px;">
-                        <div style="font-size: 24px;">${track.emoji}</div>
+                        <div style="font-size: 24px;">🎵</div>
                         <div>
                             <div style="font-weight: 600; margin-bottom: 2px;">Now Playing</div>
                             <div style="color: #1DB954; font-size: 13px;">${track.title}</div>
@@ -2525,7 +2595,7 @@
                 
                 if (titleEl) titleEl.textContent = track.title;
                 if (artistEl) artistEl.textContent = track.artist;
-                if (albumArt) albumArt.textContent = track.emoji;
+                if (albumArt) albumArt.textContent = '🎵';
                 if (totalTime) totalTime.textContent = track.duration;
             }
 
@@ -2811,263 +2881,6 @@
             if (professionalPortfolio.progressInterval) {
                 clearInterval(professionalPortfolio.progressInterval);
             }
-        });
-         class MusicPlayer {
-            constructor() {
-                this.audioPlayer = document.getElementById('audioPlayer');
-                this.playBtn = document.getElementById('playBtn');
-                this.prevBtn = document.getElementById('prevBtn');
-                this.nextBtn = document.getElementById('nextBtn');
-                this.progressContainer = document.getElementById('progressContainer');
-                this.progressBar = document.getElementById('progressBar');
-                this.currentTimeEl = document.getElementById('currentTime');
-                this.totalTimeEl = document.getElementById('totalTime');
-                this.albumArt = document.getElementById('albumArt');
-                this.mainPlayer = document.getElementById('mainPlayer');
-                this.spectrumBars = [];
-                
-                this.isPlaying = false;
-                this.currentTrack = 0;
-                
-                this.init();
-            }
-
-            init() {
-                this.initEventListeners();
-                this.initSpectrumVisualizer();
-                this.initAudioParticles();
-                this.setupAudioEvents();
-            }
-
-            initEventListeners() {
-                // Play/Pause button
-                this.playBtn.addEventListener('click', () => this.togglePlayback());
-                
-                // Progress bar click to seek
-                this.progressContainer.addEventListener('click', (e) => this.seekTrack(e));
-                
-                // Previous/Next buttons (you can add more tracks later)
-                this.prevBtn.addEventListener('click', () => this.showMessage('Previous track'));
-                this.nextBtn.addEventListener('click', () => this.showMessage('Next track'));
-            }
-
-            setupAudioEvents() {
-                // Update duration when metadata loads
-                this.audioPlayer.addEventListener('loadedmetadata', () => {
-                    this.totalTimeEl.textContent = this.formatTime(this.audioPlayer.duration);
-                });
-
-                // Update progress during playback
-                this.audioPlayer.addEventListener('timeupdate', () => {
-                    if (this.audioPlayer.duration) {
-                        const progress = (this.audioPlayer.currentTime / this.audioPlayer.duration) * 100;
-                        this.progressBar.style.width = progress + '%';
-                        this.currentTimeEl.textContent = this.formatTime(this.audioPlayer.currentTime);
-                    }
-                });
-
-                // Handle when track ends
-                this.audioPlayer.addEventListener('ended', () => {
-                    this.pausePlayback();
-                    this.showMessage('Track ended');
-                });
-
-                // Handle loading errors
-                this.audioPlayer.addEventListener('error', (e) => {
-                    console.error('Audio loading error:', e);
-                    this.showMessage('Unable to load audio file. Make sure the MP3 file is in the same folder as this HTML file.');
-                });
-
-                // Handle when audio can play
-                this.audioPlayer.addEventListener('canplay', () => {
-                    console.log('Audio is ready to play');
-                });
-            }
-
-            togglePlayback() {
-                if (this.isPlaying) {
-                    this.pausePlayback();
-                } else {
-                    this.startPlayback();
-                }
-            }
-
-            startPlayback() {
-                this.audioPlayer.play().then(() => {
-                    this.isPlaying = true;
-                    this.playBtn.textContent = '⏸️';
-                    this.albumArt.classList.add('spinning');
-                    this.mainPlayer.classList.add('playing');
-                    this.showMessage('Now playing: Dil Dharakta Hai');
-                }).catch((error) => {
-                    console.error('Playback failed:', error);
-                    this.showMessage('Playback failed. Please check if the MP3 file exists.');
-                });
-            }
-
-            pausePlayback() {
-                this.audioPlayer.pause();
-                this.isPlaying = false;
-                this.playBtn.textContent = '▶️';
-                this.albumArt.classList.remove('spinning');
-                this.mainPlayer.classList.remove('playing');
-            }
-
-            seekTrack(e) {
-                if (this.audioPlayer.duration) {
-                    const rect = this.progressContainer.getBoundingClientRect();
-                    const clickX = e.clientX - rect.left;
-                    const percentage = clickX / rect.width;
-                    const newTime = percentage * this.audioPlayer.duration;
-                    this.audioPlayer.currentTime = newTime;
-                }
-            }
-
-            formatTime(seconds) {
-                if (isNaN(seconds)) return '0:00';
-                const mins = Math.floor(seconds / 60);
-                const secs = Math.floor(seconds % 60);
-                return `${mins}:${secs.toString().padStart(2, '0')}`;
-            }
-
-            showMessage(message) {
-                // Create a notification
-                const notification = document.createElement('div');
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 80px;
-                    right: 20px;
-                    background: rgba(25, 20, 20, 0.95);
-                    backdrop-filter: blur(20px);
-                    border: 1px solid rgba(29, 185, 84, 0.3);
-                    border-radius: 12px;
-                    padding: 16px 20px;
-                    color: white;
-                    font-family: 'Inter', sans-serif;
-                    font-size: 14px;
-                    font-weight: 500;
-                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-                    z-index: 1001;
-                    transform: translateX(120%);
-                    transition: transform 0.3s ease;
-                    max-width: 300px;
-                `;
-                
-                notification.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <div style="font-size: 24px;">🎵</div>
-                        <div style="color: #1DB954; font-size: 13px;">${message}</div>
-                    </div>
-                `;
-                
-                document.body.appendChild(notification);
-                
-                // Animate in
-                setTimeout(() => {
-                    notification.style.transform = 'translateX(0)';
-                }, 100);
-                
-                // Remove after 3 seconds
-                setTimeout(() => {
-                    notification.style.transform = 'translateX(120%)';
-                    setTimeout(() => {
-                        if (notification.parentNode) {
-                            notification.parentNode.removeChild(notification);
-                        }
-                    }, 300);
-                }, 3000);
-            }
-
-            initSpectrumVisualizer() {
-                const spectrumBg = document.getElementById('spectrumBg');
-                if (!spectrumBg) return;
-
-                // Create spectrum bars
-                for (let i = 0; i < 20; i++) {
-                    const bar = document.createElement('div');
-                    bar.className = 'spectrum-bar';
-                    bar.style.left = (i * 5) + '%';
-                    bar.style.animationDelay = (i * 0.1) + 's';
-                    bar.style.animationDuration = (2 + Math.random() * 1) + 's';
-                    spectrumBg.appendChild(bar);
-                    this.spectrumBars.push(bar);
-                }
-            }
-
-            initAudioParticles() {
-                const container = document.getElementById('audioParticles');
-                if (!container) return;
-
-                // Create particles when playing
-                setInterval(() => {
-                    if (container.children.length < 6 && this.isPlaying) {
-                        this.createAudioParticle(container);
-                    }
-                }, 2000);
-            }
-
-            createAudioParticle(container) {
-                const particle = document.createElement('div');
-                particle.className = 'audio-particle';
-                
-                const colors = ['#1DB954', '#007AFF', '#5856D6', '#FF9500'];
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.background = `radial-gradient(circle, ${color} 0%, transparent 70%)`;
-                particle.style.animationDuration = (10 + Math.random() * 4) + 's';
-                
-                container.appendChild(particle);
-                
-                setTimeout(() => {
-                    if (particle.parentNode) {
-                        particle.parentNode.removeChild(particle);
-                    }
-                }, 14000);
-            }
-        }
-
-        // Initialize the music player when the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            const player = new MusicPlayer();
-            
-            // Smooth scrolling for navigation
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', (e) => {
-                    const href = anchor.getAttribute('href');
-                    if (href && href !== '#' && href.length > 1) {
-                        e.preventDefault();
-                        const target = document.querySelector(href);
-                        if (target) {
-                            target.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                        }
-                    }
-                });
-            });
-
-            // Update active navigation
-            window.addEventListener('scroll', () => {
-                const sections = document.querySelectorAll('section[id]');
-                const navLinks = document.querySelectorAll('.nav-link');
-                
-                let current = '';
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    if (window.pageYOffset >= sectionTop - 200) {
-                        current = section.getAttribute('id');
-                    }
-                });
-
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${current}`) {
-                        link.classList.add('active');
-                    }
-                });
-            });
         });
     </script>
 </body>
